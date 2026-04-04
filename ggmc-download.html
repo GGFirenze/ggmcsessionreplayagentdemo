@@ -396,5 +396,46 @@
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAll(); });
 })();
 </script>
+<script>
+(function() {
+  var screen = 'Download';
+
+  document.querySelectorAll('.nav-links a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      var name = link.textContent.trim();
+      if (name) window.amplitude.track('Nav Menu Clicked', { button_name: name, screen_name: screen });
+    });
+  });
+
+  document.querySelectorAll('a.btn-primary').forEach(function(btn) {
+    if (btn.textContent.trim().indexOf('Get the app') === 0) {
+      btn.addEventListener('click', function() {
+        window.amplitude.track('Get App Clicked', { screen_name: screen });
+      });
+    }
+  });
+
+  document.querySelectorAll('footer a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      var name = link.textContent.trim();
+      if (name) window.amplitude.track('Footer Menu Clicked', { button_name: name, screen_name: screen });
+    });
+  });
+
+  document.querySelectorAll('.store-badge').forEach(function(badge) {
+    badge.addEventListener('click', function() {
+      var text = badge.textContent.trim();
+      var type = text.indexOf('App Store') >= 0 ? 'App Store' : 'Google Play';
+      window.amplitude.track('Store Clicked', { store_type: type, screen_name: screen });
+    });
+  });
+
+  document.querySelectorAll('.btn-outline-dark').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      window.amplitude.track('Product Explore Clicked', { product_name: 'Current Account', screen_name: screen });
+    });
+  });
+})();
+</script>
 </body>
 </html>

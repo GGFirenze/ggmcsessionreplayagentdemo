@@ -643,5 +643,55 @@
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAll(); });
 })();
 </script>
+<script>
+(function() {
+  var screen = 'Investing';
+
+  document.querySelectorAll('.nav-links a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      var name = link.textContent.trim();
+      if (name) window.amplitude.track('Nav Menu Clicked', { button_name: name, screen_name: screen });
+    });
+  });
+
+  document.querySelectorAll('a.btn-primary').forEach(function(btn) {
+    if (btn.textContent.trim().indexOf('Get the app') === 0) {
+      btn.addEventListener('click', function() {
+        window.amplitude.track('Get App Clicked', { screen_name: screen });
+      });
+    }
+  });
+
+  document.querySelectorAll('footer a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      var name = link.textContent.trim();
+      if (name) window.amplitude.track('Footer Menu Clicked', { button_name: name, screen_name: screen });
+    });
+  });
+
+  document.querySelectorAll('.btn-outline-dark').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var section = btn.closest('section');
+      var h2 = section ? section.querySelector('h2') : null;
+      var product = h2 ? h2.textContent.trim() : 'GGMC Investing';
+      window.amplitude.track('Product Explore Clicked', { product_name: product, screen_name: screen });
+    });
+  });
+
+  document.querySelectorAll('.btn-accent-outline').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      window.amplitude.track('Book Call Clicked', { screen_name: screen });
+    });
+  });
+
+  document.querySelectorAll('.tip-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var h4 = card.querySelector('h4');
+      var topic = h4 ? h4.textContent.trim() : 'Unknown';
+      window.amplitude.track('Tips Clicked', { tip_topic: topic, screen_name: screen });
+    });
+  });
+})();
+</script>
 </body>
 </html>

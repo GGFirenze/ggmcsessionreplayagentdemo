@@ -1049,5 +1049,40 @@
   });
 })();
 </script>
+<script>
+(function() {
+  var screen = 'Home';
+
+  document.querySelectorAll('.nav-links a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      var name = link.textContent.trim();
+      if (name) window.amplitude.track('Nav Menu Clicked', { button_name: name, screen_name: screen });
+    });
+  });
+
+  document.querySelectorAll('a.btn-primary').forEach(function(btn) {
+    if (btn.textContent.trim().indexOf('Get the app') === 0) {
+      btn.addEventListener('click', function() {
+        window.amplitude.track('Get App Clicked', { screen_name: screen });
+      });
+    }
+  });
+
+  document.querySelectorAll('footer a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      var name = link.textContent.trim();
+      if (name) window.amplitude.track('Footer Menu Clicked', { button_name: name, screen_name: screen });
+    });
+  });
+
+  document.querySelectorAll('.feature-link').forEach(function(link) {
+    link.addEventListener('click', function() {
+      var h3 = link.closest('.feature-card').querySelector('h3');
+      var product = h3 ? h3.textContent.trim() : 'Unknown';
+      window.amplitude.track('Product Explore Clicked', { product_name: product, screen_name: screen });
+    });
+  });
+})();
+</script>
 </body>
 </html>
