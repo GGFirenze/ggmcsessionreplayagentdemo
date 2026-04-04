@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Hub | GGMC</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏦</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Amplitude Browser SDK with Session Replay -->
+  <script src="https://cdn.amplitude.com/script/1706599fc5840c81e3639e760d38c588.js"></script>
+  <script>
+    window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1}));
+    window.amplitude.init('1706599fc5840c81e3639e760d38c588', {
+      fetchRemoteConfig: true,
+      autocapture: {
+        attribution: true,
+        pageViews: true,
+        sessions: false,
+        formInteractions: false,
+        fileDownloads: false,
+        elementInteractions: false,
+        frustrationInteractions: true,
+        webVitals: true,
+      }
+    });
+  </script>
+
+  <style>
+    :root {
+      --color-primary: #0a2540;
+      --color-accent: #00d4aa;
+      --color-accent-hover: #00b894;
+      --color-accent-light: #e6faf5;
+      --color-surface: #ffffff;
+      --color-surface-alt: #f6f9fc;
+      --color-text: #1a1a2e;
+      --color-text-muted: #5a6678;
+      --color-border: #e3e8ee;
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow-card: 0 4px 24px rgba(10,37,64,0.08);
+      --shadow-elevated: 0 12px 40px rgba(10,37,64,0.12);
+      --max-width: 1200px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      color: var(--color-text);
+      background: var(--color-surface);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .logo {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.7rem;
+      color: var(--color-primary);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--color-accent); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--color-text);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+      padding: 8px 16px;
+      border-radius: 6px;
+    }
+    .nav-links a:hover {
+      color: var(--color-primary);
+      background: var(--color-surface-alt);
+    }
+    .nav-links a.active {
+      color: #1a6bb5;
+      font-weight: 600;
+    }
+    .nav-links .nav-dropdown {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-links .nav-dropdown::after {
+      content: '';
+      width: 0; height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--color-text-muted);
+      transition: transform 0.2s;
+    }
+    .nav-links .nav-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--color-border);
+      margin: 0 4px;
+    }
+    .nav-item { position: relative; }
+    .nav-dropdown[aria-expanded="true"]::after { transform: rotate(180deg); }
+    .nav-dropdown[aria-expanded="true"] { color: #1a6bb5; }
+    .dropdown-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      box-shadow: 0 8px 32px rgba(10,37,64,0.14), 0 1px 4px rgba(10,37,64,0.06);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+      z-index: 200;
+      padding: 28px 32px;
+    }
+    .dropdown-panel.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .dropdown-mega {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      min-width: 680px;
+    }
+    .dropdown-mega-col h5 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 16px;
+    }
+    .dropdown-mega-col ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .dropdown-mega-col a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px !important; border-radius: 8px;
+      font-size: 0.9rem; color: var(--color-text) !important;
+      font-weight: 500; white-space: nowrap;
+    }
+    .dropdown-mega-col a:hover { background: var(--color-surface-alt) !important; }
+    .dd-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .dd-icon.blue { background: #e8f0fe; color: #1a6bb5; }
+    .dd-icon.teal { background: var(--color-accent-light); color: var(--color-accent-hover); }
+    .dd-icon.amber { background: #fef3e2; color: #c67e1a; }
+    .dd-icon.green { background: #e6f7ed; color: #1a8a4a; }
+    .dropdown-simple { min-width: 180px; }
+    .dropdown-simple ul { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .dropdown-simple a { display: block; padding: 10px 14px !important; border-radius: 8px; font-size: 0.95rem; font-weight: 500; color: var(--color-text) !important; }
+    .dropdown-simple a:hover { background: var(--color-surface-alt) !important; }
+    .dropdown-overlay { position: fixed; inset: 0; z-index: 99; display: none; }
+    .dropdown-overlay.active { display: block; }
+
+    /* ── Page Header ── */
+    .page-header {
+      background: var(--color-surface-alt);
+      padding: 64px 24px 48px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .page-header-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .page-header h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: var(--color-primary);
+      letter-spacing: -0.5px;
+    }
+
+    /* ── Articles Grid ── */
+    .articles {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 64px 24px;
+    }
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 28px;
+    }
+    .article-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+    .article-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-elevated);
+    }
+    .article-thumb {
+      height: 180px;
+      background: linear-gradient(135deg, var(--color-primary), #1a3a5c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .article-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 50%, rgba(0,212,170,0.2) 0%, transparent 60%);
+    }
+    .article-thumb svg { position: relative; z-index: 1; }
+    .article-body {
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .article-meta {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-bottom: 8px;
+    }
+    .article-body h3 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .article-body p {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    /* ── Featured ── */
+    .featured {
+      background: var(--color-surface-alt);
+      padding: 80px 24px;
+    }
+    .featured-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .featured h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--color-primary);
+      margin-bottom: 36px;
+    }
+    .featured-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .featured-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .featured-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+    .featured-item-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--color-accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .featured-item h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 4px;
+    }
+    .featured-item p {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 80px 24px;
+      text-align: center;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .cta-section h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 800;
+      color: var(--color-primary);
+      margin-bottom: 16px;
+    }
+    .cta-section p {
+      color: var(--color-text-muted);
+      font-size: 1.05rem;
+      max-width: 480px;
+      margin: 0 auto 32px;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-accent);
+      color: var(--color-primary);
+      padding: 16px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: background 0.2s, transform 0.15s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: var(--color-accent-hover);
+      transform: translateY(-2px);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--color-primary);
+      color: rgba(255,255,255,0.7);
+      padding: 64px 24px 40px;
+    }
+    .footer-inner { max-width: var(--max-width); margin: 0 auto; }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+    .footer-col h4 {
+      color: #fff; font-size: 0.85rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col a {
+      color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--color-accent); }
+    .footer-badges { display: flex; gap: 16px; align-items: center; }
+    .footer-badge {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+      padding: 8px 16px; border-radius: var(--radius-sm);
+      font-size: 0.75rem; color: rgba(255,255,255,0.6); font-weight: 600;
+    }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1); padding-top: 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-bottom p { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+    .footer-legal {
+      font-size: 0.75rem; color: rgba(255,255,255,0.35);
+      margin-top: 24px; line-height: 1.7; max-width: 800px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .articles-grid { grid-template-columns: 1fr; }
+      .featured-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<div class="dropdown-overlay" id="dropdownOverlay"></div>
+<nav>
+  <div class="nav-inner">
+    <a href="ggmc-banking.html" class="logo">GG<span>MC</span></a>
+    <ul class="nav-links">
+      <li class="nav-item">
+        <a href="#" class="nav-dropdown" aria-expanded="false" data-dropdown="banking">Banking with us</a>
+        <div class="dropdown-panel" id="dropdown-banking">
+          <div class="dropdown-mega">
+            <div class="dropdown-mega-col">
+              <h5>Spend</h5>
+              <ul>
+                <li><a href="ggmc-banking.html#accounts"><span class="dd-icon blue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>Current account</a></li>
+                <li><a href="#"><span class="dd-icon blue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/><circle cx="18" cy="16" r="1"/></svg></span>Credit card</a></li>
+              </ul>
+            </div>
+            <div class="dropdown-mega-col">
+              <h5>Save</h5>
+              <ul>
+                <li><a href="ggmc-banking.html#savings"><span class="dd-icon teal"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>Saver account</a></li>
+                <li><a href="ggmc-banking.html#learn-more"><span class="dd-icon teal"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>Boosted saver</a></li>
+              </ul>
+            </div>
+            <div class="dropdown-mega-col">
+              <h5>Invest</h5>
+              <ul>
+                <li><a href="ggmc-banking.html#investments"><span class="dd-icon amber"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>GGMC Investing</a></li>
+              </ul>
+            </div>
+            <div class="dropdown-mega-col">
+              <h5>Insure</h5>
+              <ul>
+                <li><a href="#"><span class="dd-icon green"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>GGMC Protect</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-dropdown" aria-expanded="false" data-dropdown="about">About us</a>
+        <div class="dropdown-panel" id="dropdown-about">
+          <div class="dropdown-simple">
+            <ul>
+              <li><a href="#">Our story</a></li>
+              <li><a href="#">Community</a></li>
+              <li><a href="#">Careers</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li><div class="nav-divider"></div></li>
+      <li><a href="ggmc-hub.html" class="active">The Hub</a></li>
+      <li><a href="ggmc-support.html">Support</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Page Header -->
+<section class="page-header">
+  <div class="page-header-inner">
+    <h1>Our articles</h1>
+  </div>
+</section>
+
+<!-- Articles -->
+<section class="articles">
+  <div class="articles-grid">
+
+    <a href="#" class="article-card">
+      <div class="article-thumb">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(0,212,170,0.6)" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </div>
+      <div class="article-body">
+        <div class="article-meta">4 min read</div>
+        <h3>How far does a household income over &pound;100,000 get you?</h3>
+        <p>A couple offers a sneak peek at their monthly budget and where the money really goes.</p>
+      </div>
+    </a>
+
+    <a href="#" class="article-card">
+      <div class="article-thumb" style="background: linear-gradient(135deg, #0d4a3e, #1a5c3a);">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(0,212,170,0.6)" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      </div>
+      <div class="article-body">
+        <div class="article-meta">4 min read</div>
+        <h3>5 ways you could get the most out of your current account</h3>
+        <p>Tips and tricks to make sure you're not leaving any benefits on the table.</p>
+      </div>
+    </a>
+
+    <a href="#" class="article-card">
+      <div class="article-thumb" style="background: linear-gradient(135deg, #1a3a5c, #2d5a8c);">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(0,212,170,0.6)" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <div class="article-body">
+        <div class="article-meta">4 min read</div>
+        <h3>5 humble habits to help build serious savings</h3>
+        <p>Small changes, big results. How everyday habits can transform your savings.</p>
+      </div>
+    </a>
+
+    <a href="#" class="article-card">
+      <div class="article-thumb" style="background: linear-gradient(135deg, #3a1a5c, #5c2d8c);">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(0,212,170,0.6)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div class="article-body">
+        <div class="article-meta">5 min read</div>
+        <h3>Kakeibo: The art of budgeting and saving money</h3>
+        <p>An ancient budgeting method that's still surprisingly effective in the digital age.</p>
+      </div>
+    </a>
+
+    <a href="#" class="article-card">
+      <div class="article-thumb" style="background: linear-gradient(135deg, #5c3a1a, #8c5c2d);">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(0,212,170,0.6)" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      <div class="article-body">
+        <div class="article-meta">4 min read</div>
+        <h3>What is cashback and how does it work?</h3>
+        <p>Everything you need to know about earning money back on your everyday spending.</p>
+      </div>
+    </a>
+
+    <a href="#" class="article-card">
+      <div class="article-thumb" style="background: linear-gradient(135deg, #1a2540, #0d4a3e);">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(0,212,170,0.6)" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="article-body">
+        <div class="article-meta">4 min read</div>
+        <h3>Don't let your digital footprint become a way for fraudsters to steal your identity</h3>
+        <p>How to protect yourself online and keep your personal data safe.</p>
+      </div>
+    </a>
+
+    <a href="#" class="article-card">
+      <div class="article-thumb" style="background: linear-gradient(135deg, #0a2540, #1a5c3a);">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(0,212,170,0.6)" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="article-body">
+        <div class="article-meta">5 min read</div>
+        <h3>What does it take to become an ISA millionaire?</h3>
+        <p>We break down the numbers and timeline for reaching that seven-figure milestone.</p>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- Featured -->
+<section class="featured">
+  <div class="featured-inner">
+    <h2>Featured articles</h2>
+    <div class="featured-list">
+      <a href="#" class="featured-item">
+        <div class="featured-item-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00b894" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <h4>Staying safe when banking online</h4>
+          <p>3 min read</p>
+        </div>
+      </a>
+      <a href="#" class="featured-item">
+        <div class="featured-item-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00b894" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div>
+          <h4>To trust or not to trust? Romance scams and other online tricks</h4>
+          <p>4 min read</p>
+        </div>
+      </a>
+      <a href="#" class="featured-item">
+        <div class="featured-item-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00b894" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <div>
+          <h4>Get smart about card fraud</h4>
+          <p>5 min read</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Open a free current account</h2>
+  <p>Join thousands of people who already bank with us.</p>
+  <a href="ggmc-banking.html#get-started" class="btn-primary">Get the app</a>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">Newsroom</a></li>
+          <li><a href="#">Updates</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Sitemap</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">All legal documents</a></li>
+          <li><a href="#">General Account T&Cs</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Help Centre</h4>
+        <ul>
+          <li><a href="ggmc-support.html">Support topics</a></li>
+          <li><a href="#">Service status</a></li>
+          <li><a href="#">Contact us</a></li>
+          <li><a href="#">Accessibility</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <ul>
+          <li><a href="#">YouTube</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-badges">
+      <span class="footer-badge">Best Digital Bank 2025</span>
+      <span class="footer-badge">FSCS Protected</span>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 GGMC. All rights reserved. GGMC is a registered trademark.</p>
+    </div>
+    <p class="footer-legal">
+      GGMC is a trading name of GG Morgan Europe Limited. GG Morgan Europe Limited is authorised by the Prudential Regulation Authority and regulated by the Financial Conduct Authority and the Prudential Regulation Authority. Registered in England &amp; Wales. This is a fictitious company created for demonstration purposes only. No real financial services are offered.
+    </p>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var triggers = document.querySelectorAll('.nav-dropdown[data-dropdown]');
+  var overlay = document.getElementById('dropdownOverlay');
+  function closeAll() {
+    triggers.forEach(function(t) {
+      t.setAttribute('aria-expanded', 'false');
+      document.getElementById('dropdown-' + t.dataset.dropdown).classList.remove('open');
+    });
+    overlay.classList.remove('active');
+  }
+  triggers.forEach(function(trigger) {
+    trigger.addEventListener('click', function(e) {
+      e.preventDefault();
+      var panel = document.getElementById('dropdown-' + trigger.dataset.dropdown);
+      var isOpen = panel.classList.contains('open');
+      closeAll();
+      if (!isOpen) {
+        panel.classList.add('open');
+        trigger.setAttribute('aria-expanded', 'true');
+        overlay.classList.add('active');
+      }
+    });
+  });
+  overlay.addEventListener('click', closeAll);
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAll(); });
+})();
+</script>
+</body>
+</html>
