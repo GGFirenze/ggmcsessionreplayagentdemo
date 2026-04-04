@@ -715,7 +715,7 @@
     card.addEventListener('click', function() {
       var h3 = card.querySelector('h3');
       var name = h3 ? h3.textContent.trim() : 'Unknown';
-      window.amplitude.track('Article Clicked', { article_name: name, screen_name: screen });
+      window.amplitude.track('HUB Article Clicked', { article_name: name, screen_name: screen });
     });
   });
 
@@ -723,7 +723,7 @@
     item.addEventListener('click', function() {
       var h4 = item.querySelector('h4');
       var name = h4 ? h4.textContent.trim() : 'Unknown';
-      window.amplitude.track('Article Clicked', { article_name: name, screen_name: screen });
+      window.amplitude.track('HUB Article Clicked', { article_name: name, screen_name: screen });
     });
   });
 })();
