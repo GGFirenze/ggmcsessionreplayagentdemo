@@ -27,6 +27,13 @@
     });
   </script>
 
+  <!-- Amplitude Experiment SDK -->
+  <script src="https://unpkg.com/@amplitude/experiment-js-client@1.15.5/dist/experiment.umd.js"></script>
+  <script>
+    window.experiment = Experiment.initializeWithAmplitudeAnalytics('client-FyjcZy6asEiUftZoIjMBrV61Y7gk8H5x');
+    window.experiment.fetch();
+  </script>
+
   <style>
     :root {
       --color-primary: #0a2540;
