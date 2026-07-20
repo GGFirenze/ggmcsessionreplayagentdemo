@@ -11,6 +11,8 @@
 
   <!-- Amplitude Browser SDK with Session Replay -->
   <script src="https://cdn.amplitude.com/script/1706599fc5840c81e3639e760d38c588.js"></script>
+  <!-- Amplitude Experiment SDK -->
+  <script src="https://unpkg.com/@amplitude/experiment-js-client@1.15.5/dist/experiment.umd.js"></script>
   <script>
     window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1}));
     window.amplitude.init('1706599fc5840c81e3639e760d38c588', {
@@ -28,11 +30,49 @@
     });
   </script>
 
-  <!-- Amplitude Experiment SDK -->
-  <script src="https://unpkg.com/@amplitude/experiment-js-client@1.15.5/dist/experiment.umd.js"></script>
   <script>
-    window.experiment = Experiment.initializeWithAmplitudeAnalytics('client-FyjcZy6asEiUftZoIjMBrV61Y7gk8H5x');
-    window.experiment.fetch();
+    // Wired to the Amplitude Analytics instance above, so exposures are tracked automatically.
+    window.experiment = Experiment.initializeWithAmplitudeAnalytics(
+      'client-FyjcZy6asEiUftZoIjMBrV61Y7gk8H5x',
+      { fetchTimeoutMillis: 1000, retryFetchOnFailure: true }
+    );
+
+    // Treat "treatment"/"on" as the active branch; anything else = control (page left untouched).
+    function ggmcIsOn(v) { return !!v && (v.value === 'treatment' || v.value === 'on'); }
+
+    // Feature Experiment flags for this page. Copy can be overridden live from the
+    // Amplitude variant payload (JSON) without changing this code.
+    window.GGMC_EXPERIMENTS = {
+      'global-cta-copy': function (v) {
+        if (!ggmcIsOn(v)) return;
+        var label = (v.payload && v.payload.buttonText) || 'Open a free account →';
+        document.querySelectorAll('a.btn-primary').forEach(function (btn) {
+          if (btn.textContent.trim().toLowerCase().indexOf('get the app') === 0) btn.textContent = label;
+        });
+      },
+      'support-hero-message': function (v) {
+        if (!ggmcIsOn(v)) return;
+        var h1 = document.querySelector('.support-header h1');
+        var p  = document.querySelector('.support-header p');
+        if (h1) h1.textContent = (v.payload && v.payload.headline) || "We're here to help, 24/7";
+        if (p) p.textContent = (v.payload && v.payload.subcopy) || 'Search our help centre or reach a real person anytime — day or night.';
+      }
+    };
+
+    function ggmcApplyExperiments() {
+      Object.keys(window.GGMC_EXPERIMENTS).forEach(function (key) {
+        try { window.GGMC_EXPERIMENTS[key](window.experiment.variant(key)); }
+        catch (e) { console.warn('[GGMC] failed to apply experiment', key, e); }
+      });
+    }
+
+    window.experiment.fetch().then(function () {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', ggmcApplyExperiments);
+      } else {
+        ggmcApplyExperiments();
+      }
+    });
   </script>
 
   <style>
