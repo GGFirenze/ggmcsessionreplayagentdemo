@@ -13,8 +13,11 @@
   <script src="https://cdn.amplitude.com/script/1706599fc5840c81e3639e760d38c588.js"></script>
   <!-- Amplitude Experiment SDK -->
   <script src="https://unpkg.com/@amplitude/experiment-js-client@1.15.5/dist/experiment.umd.js"></script>
+  <!-- Amplitude Guides and Surveys SDK -->
+  <script src="https://cdn.amplitude.com/script/1706599fc5840c81e3639e760d38c588.engagement.js"></script>
   <script>
     window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1}));
+    window.amplitude.add(window.engagement.plugin());
     window.amplitude.init('1706599fc5840c81e3639e760d38c588', {
       fetchRemoteConfig: true,
       autocapture: {
